@@ -1,17 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+from config.config_reader import ConfigReader
+
 
 class DriverFactory:
-    """
-    Creates and returns WebDriver instances.
-    """
 
     @staticmethod
-    def get_driver(headless=True):
+    def get_driver():
+
         options = Options()
 
-        if headless:
+        if ConfigReader.get_headless():
             options.add_argument("--headless=new")
 
         options.add_argument("--no-sandbox")
@@ -20,7 +20,6 @@ class DriverFactory:
 
         driver = webdriver.Chrome(options=options)
 
-        driver.maximize_window()
-        driver.implicitly_wait(10)
+        driver.implicitly_wait(ConfigReader.get_implicit_wait())
 
         return driver
