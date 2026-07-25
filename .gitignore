@@ -33,3 +33,9 @@ Thumbs.db
 # Allure
 allure-results/
 allure-report/
+
+# Images generated during tests
+*.png
+
+# Chrome installer
+*.deb
