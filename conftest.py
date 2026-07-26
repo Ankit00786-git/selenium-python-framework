@@ -2,7 +2,8 @@ import pytest
 from datetime import datetime
 from pathlib import Path
 from utils.driver_factory import DriverFactory
-
+import platform
+from utils.screenshot_util import ScreenshotUtil
 
 @pytest.fixture
 def driver():
@@ -26,8 +27,24 @@ def pytest_runtest_makereport(item, call):
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{item.name}_{timestamp}.png"
-            filepath = screenshot_dir / filename
+            filepath = filepath = ScreenshotUtil.capture(
+            driver,
+            item.name)
+
+            print(f"\nScreenshot captured: {filepath}")
 
             driver.save_screenshot(str(filepath))
 
             print(f"\nScreenshot captured: {filepath}")
+
+def pytest_configure(config):
+    metadata = config.stash.get("metadata", {})
+
+    metadata["Project"] = "Selenium Python Framework"
+    metadata["Framework"] = "PyTest + Selenium"
+    metadata["Browser"] = "Chrome"
+    metadata["Environment"] = "QA"
+    metadata["OS"] = platform.system()
+    metadata["Python"] = platform.python_version()
+
+    config.stash["metadata"] = metadata

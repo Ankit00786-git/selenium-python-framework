@@ -4,7 +4,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from utils.logger import Logger
 from pathlib import Path
 from datetime import datetime
-from utils.screenshot_util import ScreenshotUtil
 
 class BasePage:
 
@@ -47,15 +46,22 @@ class BasePage:
         self.logger.info("Closing browser")
         self.driver.quit()
 
-    def take_screenshot(self, name="Screenshot"):
+        def take_screenshot(self, name="Screenshot"):
         """
         Capture and save a screenshot.
         """
 
-        filepath = ScreenshotUtil.capture(
-            self.driver,
-             name)
+        screenshot_dir = Path("screenshots")
+        screenshot_dir.mkdir(exist_ok=True)
 
-        self.logger.info(f"Screenshot saved: {filepath}")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        return filepath
+        filename = f"{name}_{timestamp}.png"
+
+        file_path = screenshot_dir / filename
+
+        self.driver.save_screenshot(str(file_path))
+
+        self.logger.info(f"Screenshot saved: {file_path}")
+
+        return str(file_path)
