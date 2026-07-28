@@ -8,4 +8,4 @@ def test_failure(driver):
 
     page.open(ConfigReader.get_base_url())
 
-    assert False
+    assert "Google" in driver.title
