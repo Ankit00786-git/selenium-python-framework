@@ -12,7 +12,9 @@ pipeline {
         stage('Create Virtual Environment') {
             steps {
                 sh '''
+                rm -rf venv
                 python3 -m venv venv
+                ls -la venv/bin
                 '''
             }
         }
@@ -40,14 +42,6 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: 'reports/*.html', fingerprint: true
-        }
-
-        success {
-            echo 'Build Successful'
-        }
-
-        failure {
-            echo 'Build Failed'
         }
     }
 }
