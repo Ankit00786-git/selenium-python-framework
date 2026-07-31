@@ -1,6 +1,24 @@
 pipeline {
     agent any
+    parameters {
+    choice(
+        name: 'BROWSER',
+        choices: ['chrome', 'firefox', 'edge'],
+        description: 'Select Browser'
+    )
 
+    choice(
+        name: 'ENV',
+        choices: ['DEV', 'QA', 'UAT'],
+        description: 'Select Environment'
+    )
+
+    booleanParam(
+        name: 'HEADLESS',
+        defaultValue: true,
+        description: 'Run tests in headless mode'
+    )
+}
     stages {
 
         stage('Verify Python') {
